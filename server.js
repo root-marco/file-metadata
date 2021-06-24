@@ -1,20 +1,23 @@
-const express = require('express');
-var cors = require('cors');
-require('dotenv').config()
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
-var app = express();
+// APP
+const app = express();
+const PORT = process.env.PORT || 3000;
 
+// MIDDLEWARES
 app.use(cors());
-app.use('/public', express.static(process.cwd() + '/public'));
+app.use("/public", express.static(`${process.cwd()}/src/public`));
 
-app.get('/', function (req, res) {
-    res.sendFile(process.cwd() + '/views/index.html');
-});
+// ROUTES
+import rootRouter from "./src/routes/rootRouter.js";
+import apiRouter from "./src/routes/apiRouter.js";
+app.use("/", rootRouter);
+app.use("/api", apiRouter);
 
-
-
-
-const port = process.env.PORT || 3000;
-app.listen(port, function () {
-  console.log('Your app is listening on port ' + port)
+// LISTEN
+app.listen(PORT, function () {
+    console.info(`Your app is listening on port ${PORT}`);
 });
